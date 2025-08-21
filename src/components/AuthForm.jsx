@@ -15,6 +15,7 @@ import FormField from './ui/FormField';
 import { useRouter } from 'next/navigation';
 import FormSelect from './ui/FormSelect';
 import * as faceapi from 'face-api.js';
+import Loader from './ui/Loader';
 
 export function AuthForm({ className, pathname = 'login', ...props }) {
   const isSignup = pathname === 'signup';
@@ -51,9 +52,6 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
   const loginSchema = z.object({
     email: z.string().email(),
     password: z.string().min(1, 'Password is required'),
-    role: z.enum(['patient', 'doctor', 'pharmacist', 'diagnostic'], {
-      required_error: 'Role is required',
-    }),
   });
 
   const formSchema = isSignup ? signupSchema : loginSchema;
@@ -86,7 +84,6 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
     },
   });
 
-  const role = watch('role');
 
   const handleFileChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
@@ -154,25 +151,30 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
 
 
   const onSubmit = async (data) => {
-    if (!faceDescriptor || faceDescriptor.length === 0) {
+    if ((!faceDescriptor || faceDescriptor.length === 0) && isSignup) {
       toast.error('Please detect your face before submitting');
       return;
     }
 
     const formData = new FormData();
-    formData.append('email', data.email);
-    formData.append('password', data.password);
-    formData.append('name', data.name);
-    formData.append('age', data.age);
-    formData.append('role', data.role);
-    formData.append('faceDescriptor', JSON.stringify(faceDescriptor));
+    const body = {};
+    if (isSignup) {
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('name', data.name);
+      formData.append('age', data.age);
+      formData.append('role', data.role);
+      formData.append('faceDescriptor', JSON.stringify(faceDescriptor));
 
-    if (data.avatar && data.avatar.length > 0) {
-      formData.append('avatar', data.avatar[0]);
+      if (data.avatar && data.avatar.length > 0) {
+        formData.append('avatar', data.avatar[0]);
+      }
+    } else {
+      body.email = data.email;
+      body.password = data.password;
     }
-
     refetch({
-      payload: formData,
+      payload: isSignup ? formData : body,
     });
   };
 
@@ -221,23 +223,6 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
                 isSecret={true}
               />
 
-              <FormSelect
-                name="role"
-                label="Role"
-                placeholder="Select your role"
-                control={control}
-                options={[
-                  { label: 'Patient', value: 'patient' },
-                  { label: 'Doctor', value: 'doctor' },
-                  { label: 'Pharmacist', value: 'pharmacist' },
-                  { label: 'Diagnostic', value: 'diagnostic' },
-                ]}
-                errors={errors}
-                required={true}
-                parentClass="mb-4"
-              />
-
-
 
               {/* Additional signup fields */}
               {isSignup && (
@@ -274,9 +259,28 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
                       onChange={handleFileChange}
                     />
                     <Button type="button" className='w-[100px]' disabled={isProcessing} onClick={getFaceDescriptor}>
-                      {isProcessing ? '<MoonLoader size={12} /> ' : "  Detect Image"}
+                      {isProcessing ? <Loader /> : "  Detect Image"}
                     </Button>
                   </div>
+
+
+                  <FormSelect
+                    name="role"
+                    label="Role"
+                    placeholder="Select your role"
+                    control={control}
+                    options={[
+                      { label: 'Patient', value: 'patient' },
+                      { label: 'Doctor', value: 'doctor' },
+                      { label: 'Pharmacist', value: 'pharmacist' },
+                      { label: 'Diagnostic', value: 'diagnostic' },
+                    ]}
+                    errors={errors}
+                    required={true}
+                    parentClass="mb-4"
+                  />
+
+
                 </>
               )}
 

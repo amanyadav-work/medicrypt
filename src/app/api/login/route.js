@@ -9,20 +9,16 @@ const JWT_SECRET = process.env.JWT_SECRET; // Must be set in your .env
 
 export async function POST(req) {
   try {
-   const { email, password, role } = await req.json();
+   const { email, password } = await req.json();
 
-    if (!email || !password || !role) {
-      return sendErrorResponse({ code: 'missing_fields', message: 'Missing email, password, or role', status: 400 });
+    if (!email || !password ) {
+        return sendErrorResponse({ code: 'missing_fields', message: 'Missing email, password, or role', status: 400 });
     }
     await dbConnect();
 
     const user = await User.findOne({ email });
     if (!user) {
       return sendErrorResponse({ code: 'user_not_found', message: 'User not found', status: 404 });
-    }
-
-    if (user.role !== role) {
-      return sendErrorResponse({ code: 'invalid_role', message: 'User role does not match', status: 401 });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);

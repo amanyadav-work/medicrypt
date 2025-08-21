@@ -22,7 +22,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     },
     onError: (err) => {
-      toast.error(err.message || "An error occurred while fetching user data");
+      console.log(err)
       setIsLoading(false);
     },
   });
