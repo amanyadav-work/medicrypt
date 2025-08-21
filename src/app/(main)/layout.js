@@ -13,6 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { ModeToggle } from "@/components/ui/theme-toggle"
 
 const MainLayout = ({ children }) => {
     return (
@@ -37,6 +38,7 @@ const MainLayout = ({ children }) => {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
+            <ModeToggle/>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
