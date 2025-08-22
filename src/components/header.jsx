@@ -12,8 +12,8 @@ const Header = () => {
       <div className="my-container mx-auto flex justify-between items-center">
         <h1 className="text-[13px] font-semibold">
           <Link href="/" className="flex gap-1 items-center">
-            <img src="/Logo.png" alt="" className="w-[23px] -mt-0.5" />
-            <span className="border-[1.5px] rounded-sm px-2 py-1">
+            <img src="/images/logo.png" alt="" className="w-16 ms-5" />
+            <span className="rounded-sm py-1">
               MEDICRYPT
             </span>
           </Link>

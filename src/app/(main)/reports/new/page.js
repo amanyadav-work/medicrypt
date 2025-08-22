@@ -70,9 +70,15 @@ const UploadReport = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-[60vh]">
+        <div className="flex justify-center items-center min-h-[60vh] pt-10">
             <Card className="w-full max-w-md p-6 shadow-lg">
-                <h2 className="text-xl font-semibold mb-4 text-center">Upload Report</h2>
+                <h2 className="text-xl font-bold mb-8 text-center 
+               bg-gradient-to-r 
+               from-green-500 via-emerald-500 to-teal-500 
+               dark:from-lime-400 dark:via-green-400 dark:to-emerald-300 
+               bg-clip-text text-transparent drop-shadow-sm">
+                    Upload Reports
+                </h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     <Controller
                         name="name"
@@ -135,9 +141,10 @@ const UploadReport = () => {
                             />
                         )}
                     />
-                    <Button type="submit" disabled={isLoading} className="w-full">
+                    <Button type="submit" disabled={isLoading} className="w-full bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 dark:from-green-300 dark:via-emerald-300 dark:to-teal-300 text-white hover:opacity-90 shadow-md shadow-emerald-400/20">
                         {isLoading ? 'Uploading...' : 'Upload'}
                     </Button>
+
                 </form>
                 {error && <div className="mt-4 text-center text-destructive text-sm">{error}</div>}
                 {data && <div className="mt-4 text-center text-success text-sm">File uploaded: {data.url || 'Success'}</div>}

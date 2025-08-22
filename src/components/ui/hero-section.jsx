@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, QrCode, Clock, Users, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "./badge";
+import Link from "next/link";
 
 const HeroSection = () => {
     return (
@@ -29,18 +30,20 @@ const HeroSection = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                            <Button
+                            <Link href="/login"><Button
                                 size="lg"
                                 className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400
-                 dark:from-green-300 dark:via-emerald-300 dark:to-teal-300
-                 text-white hover:opacity-90 shadow-md shadow-emerald-400/20 font-medium"
+                                         dark:from-green-300 dark:via-emerald-300 dark:to-teal-300
+                                         text-white hover:opacity-90 shadow-md shadow-emerald-400/20 font-medium"
                             >
                                 Start Sharing Securely
-                            </Button>
+                            </Button></Link>
 
-                            <Button variant="outline" size="lg" className="border-2">
-                                Watch Demo
-                            </Button>
+                            <Link href="/login">
+                                <Button variant="outline" size="lg" className="border-2">
+                                    Watch Demo
+                                </Button>
+                            </Link>
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
