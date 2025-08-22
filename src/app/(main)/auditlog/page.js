@@ -25,7 +25,7 @@ const AuditLogPage = () => {
     }
   });
 
-  if (userLoading || isLoading) return <Loader fullScreen />;
+  if (userLoading || isLoading) return <Loader />;
   if (error) return <div className="text-destructive text-center py-10">{error}</div>;
 
   const logs = data?.logs || [];
@@ -54,9 +54,9 @@ const AuditLogPage = () => {
                 <TableCell className="flex items-center gap-2">
                   <Image src={log.user?.avatar || "/window.svg"} alt={log.user?.name || "User"} width={32} height={32} className="rounded-full border object-cover"
                     style={{ borderRadius: '50%', objectFit: 'cover', width: 36, height: 36 }} />
-                  <span>{log.user?.name}</span>
+                  <span>{log.user?.name || '-'}</span>
                 </TableCell>
-                <TableCell>{log.user?.email}</TableCell>
+                <TableCell>{log.user?.email || '-'}</TableCell>
                 <TableCell className="capitalize font-medium">{log.action}</TableCell>
                 <TableCell>{log.resourceName || '-'}</TableCell>
                 <TableCell className='text-right'>{format(new Date(log.createdAt), "MMM d, yyyy h:mm a")}</TableCell>

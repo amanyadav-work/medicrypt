@@ -23,14 +23,25 @@ export const uploadImage = async (file) => {
   });
 };
 
-export const uploadPDF = async (base64, userId, ext) => {
-  const publicId = `reports/${userId}.${ext}`;
+// export const uploadPDF = async (base64, userId, ext) => {
+//   const publicId = `reports/${userId}.${ext}`;
 
+//   const uploadRes = await cloudinary.uploader.upload(base64, {
+//     resource_type: 'raw',
+//     public_id: publicId,
+//     overwrite: true,
+//   });
+
+//   return uploadRes.secure_url;
+// };
+
+export const uploadPDF = async (base64, userId, ext) => {
+  const publicId = `reports/${userId}-${Date.now()}.${ext}`;
   const uploadRes = await cloudinary.uploader.upload(base64, {
     resource_type: 'raw',
     public_id: publicId,
-    overwrite: true,
+    overwrite: false,
+    type: 'authenticated', // 🔐 Makes it private
   });
-
-  return uploadRes.secure_url;
+  return uploadRes.public_id; // ⬅️ Return only the ID
 };

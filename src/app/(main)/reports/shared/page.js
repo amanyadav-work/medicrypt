@@ -68,7 +68,7 @@ const SharedReportsPage = () => {
               </Link>
             );
           })
-        )}
+        )}s
       </div>
     </div>
   );

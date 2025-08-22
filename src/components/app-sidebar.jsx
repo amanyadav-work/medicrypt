@@ -55,11 +55,11 @@ const data = {
       items: [
         {
           title: "Overview",
-          url: "/dashboard/overview",
+          url: "/dashboard",
         },
         {
           title: "Recent Reports",
-          url: "/dashboard/reports",
+          url: "/reports",
         },
         {
           title: "Notifications",
@@ -104,11 +104,7 @@ const data = {
     },
   ],
   projects: [
-    {
-      name: "Q3 Marketing Campaign",
-      url: "/projects/q3-marketing",
-      icon: Frame,
-    },
+   
   ],
 }
 
@@ -140,7 +136,7 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMainFiltered} />
-        <NavProjects projects={data.projects} />
+        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user || {}} />

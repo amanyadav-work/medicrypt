@@ -13,6 +13,25 @@ import { shareSchema } from '@/validation/share';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import FormField from '@/components/ui/FormField';
 import { toast } from 'sonner';
+import z from 'zod';
+
+
+const shareSchemaFace = z.object({
+    email: z.string().email({ message: 'Invalid email address' }),
+});
+
+const shareSchemaOTP = z.object({
+    phone: z.string().min(10, 'Phone must be at least 10 digits'),
+});
+
+const shareSchemaQR = shareSchemaOTP;
+
+const schemaMap = {
+    face: shareSchemaFace,
+    otp: shareSchemaOTP,
+    qr: shareSchemaQR,
+};
+
 
 const ReportView = () => {
     const { user, isLoading: userLoading } = useUser();
@@ -60,19 +79,32 @@ const ReportView = () => {
 
 
     // Minimalistic, modern card layout with owner, views, comments, and comment form
+    const [shareSuccess, setShareSuccess] = useState('');
+    const [openShareDialog, setOpenShareDialog] = useState(false);
+    const [faceVerified, setFaceVerified] = useState(false);
+    const [accessType, setAccessType] = useState('face');
+
+
+
+    const getDefaultValues = () => {
+        if (accessType === 'face') {
+            return { email: '' };
+        } else if (accessType === 'otp' || accessType === 'qr') {
+            return { phone: '' };
+        }
+        return {};
+    };
+
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors }
     } = useForm({
-        resolver: zodResolver(shareSchema),
-        defaultValues: { email: '' },
+        resolver: zodResolver(schemaMap[accessType]),
+        defaultValues: getDefaultValues(),
     });
 
-    const [shareSuccess, setShareSuccess] = useState('');
-    const [openShareDialog, setOpenShareDialog] = useState(false);
-    const [faceVerified, setFaceVerified] = useState(false);
 
     const {
         isLoading: shareLoading,
@@ -96,9 +128,15 @@ const ReportView = () => {
 
     const onShareSubmit = async (values) => {
         setShareSuccess('');
-        await shareReport({
-            payload: { email: values.email },
-        });
+        let payload = { accessType };
+        if (accessType === 'face') {
+            const { email } = values;
+            if (email) payload.email = email;
+        } else if (accessType === 'otp' || accessType === 'qr') {
+            const { phone } = values;
+            if (phone) payload.phone = phone;
+        }
+        await shareReport({ payload });
     };
 
 
@@ -132,7 +170,7 @@ const ReportView = () => {
     // If shared user, require face verification
     if (isShared && !isOwner && !faceVerified) {
         // You may want to fetch the targetDescriptor from user.faceDescriptor or report
-        const targetDescriptor = user?.faceDescriptor|| [];
+        const targetDescriptor = user?.faceDescriptor || [];
         console.log("Descriptor length before save:", targetDescriptor.length); // should be 128
 
         return (
@@ -168,15 +206,47 @@ const ReportView = () => {
                                         <DialogTitle>Share Report</DialogTitle>
                                     </DialogHeader>
                                     <form onSubmit={handleSubmit(onShareSubmit)} className="space-y-4">
-                                        <FormField
-                                            id="email"
-                                            label="User Email"
-                                            placeholder="Enter user email to share"
-                                            register={register}
-                                            errors={errors}
-                                            disabled={shareLoading}
-                                            required
-                                        />
+                                        {accessType === 'face' ? (
+                                            <FormField
+                                                id="email"
+                                                label="User Email"
+                                                placeholder="Enter user email to share"
+                                                register={register}
+                                                errors={errors}
+                                                disabled={shareLoading}
+                                                required
+                                            />
+                                        ) : (
+                                            <FormField
+                                                id="phone"
+                                                label="User Phone Number"
+                                                placeholder="Enter user phone number to share"
+                                                register={register}
+                                                errors={errors}
+                                                disabled={shareLoading}
+                                                required
+                                            />
+                                        )}
+                                        <div className="flex flex-col gap-2 mt-2">
+                                            <label className="text-sm font-medium mb-1">Access Type</label>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    type="button"
+                                                    className={`px-3 py-1 rounded-lg border ${accessType === 'qr' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
+                                                    onClick={() => setAccessType('qr')}
+                                                >QR Based</button>
+                                                <button
+                                                    type="button"
+                                                    className={`px-3 py-1 rounded-lg border ${accessType === 'otp' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
+                                                    onClick={() => setAccessType('otp')}
+                                                >OTP</button>
+                                                <button
+                                                    type="button"
+                                                    className={`px-3 py-1 rounded-lg border ${accessType === 'face' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
+                                                    onClick={() => setAccessType('face')}
+                                                >Face Recognition</button>
+                                            </div>
+                                        </div>
                                         <DialogFooter>
                                             <button
                                                 type="submit"

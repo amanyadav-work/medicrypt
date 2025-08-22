@@ -16,6 +16,12 @@ const SharedReportSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  accessType: {
+    type: String,
+    enum: ['qr', 'otp', 'face'],
+    default: 'face',
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

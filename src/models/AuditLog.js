@@ -4,7 +4,7 @@ const AuditLogSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
+        required: false, // Optional for public access
     },
     action: {
         type: String,

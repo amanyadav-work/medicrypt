@@ -15,7 +15,7 @@ const ReportSchema = new Schema({
     trim: true,
     default: "",
   },
-  url: {
+  publicId: { // ⬅️ new field
     type: String,
     required: true,
   },

@@ -253,7 +253,7 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
                     />
                   </div>
 
-                  <div className="flex gap-2 items-end items-center">
+                  <div className="flex gap-2 items-end">
                     <FormField
                       id="avatar"
                       label="Profile Image"
