@@ -90,7 +90,7 @@ export async function POST(req, { params }) {
       // Send WhatsApp message with OTP and link
       try {
         const link = `${process.env.FRONT_END_URL}/otp-access?token=${encodeURIComponent(token)}`;
-        const message = `Your OTP for report access is: ${otp}\nAccess link: ${link}`;
+        const message = `Your OTP for report access is: ${otp}\nAccess link:\n\n ${link}`;
         await sendWhatsapp({ phone, message });
       } catch (err) {
         // Log but don't fail sharing if WhatsApp fails
