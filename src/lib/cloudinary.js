@@ -22,3 +22,15 @@ export const uploadImage = async (file) => {
     stream.end(buffer);
   });
 };
+
+export const uploadPDF = async (base64, userId, ext) => {
+  const publicId = `reports/${userId}.${ext}`;
+
+  const uploadRes = await cloudinary.uploader.upload(base64, {
+    resource_type: 'raw',
+    public_id: publicId,
+    overwrite: true,
+  });
+
+  return uploadRes.secure_url;
+};

@@ -92,7 +92,7 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
   useEffect(() => {
     window.scrollTo(0, 0);
     const loadModels = async () => {
-      if (modelsLoaded) return;
+      if (modelsLoaded && !isSignup) return;
       try {
         const modelUrl = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights";
         await faceapi.nets.ssdMobilenetv1.loadFromUri(modelUrl);

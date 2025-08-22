@@ -31,126 +31,113 @@ import { useUser } from "@/context/UserContext"
 const data = {
   teams: [
     {
-      name: "Acme Inc",
+      name: "MediCrypt",
       logo: GalleryVerticalEnd,
+      plan: "Your reports at ease",
+    },
+    {
+      name: "Product Team",
+      logo: AudioWaveform,
       plan: "Enterprise",
     },
     {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
+      name: "Design Team",
       logo: Command,
       plan: "Free",
     },
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: PieChart,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Overview",
+          url: "/dashboard/overview",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Recent Reports",
+          url: "/dashboard/reports",
         },
         {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
+          title: "Notifications",
+          url: "/dashboard/notifications",
         },
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
+      title: "Reports",
+      url: "/reports",
+      icon: SquareTerminal,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Shared Reports",
+          url: "/reports/shared",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "My Reports",
+          url: "/reports",
         },
         {
-          title: "Tutorials",
-          url: "#",
+          title: "Create Report",
+          url: "/reports/new",
+        },
+      ],
+    },
+    {
+      title: "Media Library",
+      url: "/media",
+      icon: GalleryVerticalEnd,
+      items: [
+        {
+          title: "Images",
+          url: "/media/images",
         },
         {
-          title: "Changelog",
-          url: "#",
+          title: "Videos",
+          url: "/media/videos",
+        },
+        {
+          title: "Documents",
+          url: "/media/documents",
         },
       ],
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
+          title: "Profile",
+          url: "/settings/profile",
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Team Settings",
+          url: "/settings/team",
         },
         {
           title: "Billing",
-          url: "#",
+          url: "/settings/billing",
         },
         {
-          title: "Limits",
-          url: "#",
+          title: "Notifications",
+          url: "/settings/notifications",
         },
       ],
     },
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
+      name: "Q3 Marketing Campaign",
+      url: "/projects/q3-marketing",
       icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
     },
   ],
 }
+
 
 export function AppSidebar({
   ...props
