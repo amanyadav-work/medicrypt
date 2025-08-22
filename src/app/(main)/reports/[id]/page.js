@@ -13,6 +13,7 @@ import { shareSchema } from '@/validation/share';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import FormField from '@/components/ui/FormField';
 import { toast } from 'sonner';
+import { Share2 } from 'lucide-react';
 import z from 'zod';
 
 
@@ -186,81 +187,121 @@ const ReportView = () => {
         );
     }
     return (
-        <div className="flex flex-col items-center min-h-[60vh] py-10 px-4">
+        <div className="flex justify-center py-10 px-4">
             <div className="w-full max-w-2xl">
-                <div className="bg-card border border-border rounded-xl shadow-lg p-8 flex flex-col gap-8">
+                <div className="bg-card border border-border rounded-xl shadow-md p-4 sm:p-6 flex flex-col gap-6">
+
+                    {/* Header */}
+                    <div className="flex justify-start gap-5 items-center border-b pb-4">
+                        <div className="flex items-center gap-3">
+                            <Image
+                                src={data.owner?.avatar || '/window.svg'}
+                                alt={data.owner?.name || 'User'}
+                                width={40}
+                                height={40}
+                                className="object-cover w-full h-full rounded-full"
+                            />
+                            <div className="text-sm">
+                                <div className="font-semibold">{data.owner?.name || 'Unknown'}</div>
+                                <div className="text-muted-foreground text-xs">{data.owner?.email}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 w-10 h-10 rounded-full overflow-hidden border">
+                        <Image
+                            src={data.owner?.avatar || '/window.svg'}
+                            alt={data.owner?.name || 'User'}
+                            width={40}
+                            height={40}
+                            className="object-cover w-full h-full"
+                        />
+                    </div>
+                    <div className="text-sm">
+                        <div className="font-semibold">{data.owner?.name || 'Unknown'}</div>
+                        <div className="text-muted-foreground text-xs">{data.owner?.email}</div>
+                    </div>
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full mb-2 gap-2">
-                        {/* Share Button & Dialog - only for owner, not for shared users */}
-                        {isOwner && (
-                            <Dialog open={openShareDialog} onOpenChange={setOpenShareDialog}>
-                                <DialogTrigger asChild>
-                                    <button
-                                        type="button"
-                                        className="px-3 py-1 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm mb-2"
-                                    >
-                                        Share Report
-                                    </button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>Share Report</DialogTitle>
-                                    </DialogHeader>
-                                    <form onSubmit={handleSubmit(onShareSubmit)} className="space-y-4">
-                                        {accessType === 'face' ? (
-                                            <FormField
-                                                id="email"
-                                                label="User Email"
-                                                placeholder="Enter user email to share"
-                                                register={register}
-                                                errors={errors}
-                                                disabled={shareLoading}
-                                                required
-                                            />
-                                        ) : (
-                                            <FormField
-                                                id="phone"
-                                                label="User Phone Number"
-                                                placeholder="Enter user phone number to share"
-                                                register={register}
-                                                errors={errors}
-                                                disabled={shareLoading}
-                                                required
-                                            />
-                                        )}
-                                        <div className="flex flex-col gap-2 mt-2">
-                                            <label className="text-sm font-medium mb-1">Access Type</label>
-                                            <div className="flex gap-2">
-                                                <button
-                                                    type="button"
-                                                    className={`px-3 py-1 rounded-lg border ${accessType === 'qr' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
-                                                    onClick={() => setAccessType('qr')}
-                                                >QR Based</button>
-                                                <button
-                                                    type="button"
-                                                    className={`px-3 py-1 rounded-lg border ${accessType === 'otp' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
-                                                    onClick={() => setAccessType('otp')}
-                                                >OTP</button>
-                                                <button
-                                                    type="button"
-                                                    className={`px-3 py-1 rounded-lg border ${accessType === 'face' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
-                                                    onClick={() => setAccessType('face')}
-                                                >Face Recognition</button>
-                                            </div>
-                                        </div>
-                                        <DialogFooter>
+                        {/* Share Button & Dialog */}
+                        {isOwner && (<Dialog open={openShareDialog} onOpenChange={setOpenShareDialog}>
+                            <DialogTrigger asChild>
+                                <button
+                                    type="button"
+                                    className="ms-auto p-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition"
+                                    aria-label="Share Report"
+                                >
+                                    <Share2 size={18} />
+                                </button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Share Report</DialogTitle>
+                                </DialogHeader>
+                                <form onSubmit={handleSubmit(onShareSubmit)} className="space-y-4">
+                                    {accessType === 'face' ? (
+                                        <FormField
+                                            id="email"
+                                            label="User Email"
+                                            placeholder="Enter user email to share"
+                                            register={register}
+                                            errors={errors}
+                                            disabled={shareLoading}
+                                            required
+                                        />) : (
+                                        <FormField
+                                            id="phone"
+                                            label="User Phone Number"
+                                            placeholder="Enter user phone number to share"
+                                            register={register}
+                                            errors={errors}
+                                            disabled={shareLoading}
+                                            required
+                                        />
+                                    )}
+                                    <div className="flex flex-col gap-2 mt-2">
+                                        <label className="text-sm font-medium mb-1">Access Type</label>
+                                        <div className="flex gap-2">
                                             <button
-                                                type="submit"
-                                                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm"
-                                                disabled={shareLoading}
-                                            >
-                                                {shareLoading ? 'Sharing...' : 'Share'}
-                                            </button>
-                                        </DialogFooter>
-                                    </form>
-                                </DialogContent>
-                            </Dialog>
-                        )}
-                        <h2 className="text-2xl font-semibold tracking-tight">{data.name || 'Report'}</h2>
+                                                type="button"
+                                                className={`px-3 py-1 rounded-lg border ${accessType === 'qr' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
+                                                onClick={() => setAccessType('qr')}
+                                            >QR Based</button>
+                                            <button
+                                                type="button"
+                                                className={`px-3 py-1 rounded-lg border ${accessType === 'otp' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
+                                                onClick={() => setAccessType('otp')}
+                                            >OTP</button>
+                                            <button
+                                                type="button"
+                                                className={`px-3 py-1 rounded-lg border ${accessType === 'face' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'} font-medium transition`}
+                                                onClick={() => setAccessType('face')}
+                                            >Face Recognition</button>
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <button
+                                            type="submit"
+                                            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm"
+                                            disabled={shareLoading}
+                                        >
+                                            {shareLoading ? 'Sharing...' : 'Share'}
+                                        </button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>)}
+                        {/* Report Content */}
+                        <div className="flex flex-col gap-2">
+                            <h2 className="text-xl font-semibold text-foreground">{data.name || 'Untitled Report'}</h2>
+                            {data.desc && (
+                                <p className="text-muted-foreground text-sm">{data.desc}</p>
+                            )}
+                            <div className="text-xs text-muted-foreground flex gap-4">
+                                <span>Views: <strong>{data.views}</strong></span>
+                                <span>Created: {data.createdAt ? format(new Date(data.createdAt), 'PPP') : '-'}</span>
+                            </div>
+                        </div>
+
                         <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
                             {data.owner && (
                                 <span className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -294,10 +335,10 @@ const ReportView = () => {
                         <div className="w-full flex items-center justify-center">
                             <Image
                                 src={data.url}
-                                alt="Report Image"
+                                alt="Report"
                                 width={600}
                                 height={800}
-                                className="rounded-lg shadow-sm object-contain max-h-[500px] w-auto"
+                                className="rounded-lg max-h-[500px] object-contain"
                                 priority
                             />
                         </div>
@@ -327,12 +368,12 @@ const ReportView = () => {
                                                 />
                                             </div>
                                             <div className="flex-1">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="font-semibold text-base text-foreground">{comment.user?.name || 'User'}</span>
+                                                <div className="flex justify-between items-center mb-1">
+                                                    <span className="font-semibold text-sm">{comment.user?.name || 'User'}</span>
                                                     <span className="text-xs text-muted-foreground">{comment.user?.email}</span>
                                                     <span className="text-xs text-muted-foreground ml-auto">{comment.createdAt ? format(new Date(comment.createdAt), 'MMM d, yyyy h:mm a') : ''}</span>
                                                 </div>
-                                                <div className="text-[15px] text-foreground mt-1" style={{ wordBreak: 'break-word' }}>{comment.text}</div>
+                                                <p className="text-sm text-foreground break-words">{comment.text}</p>
                                             </div>
                                         </div>
                                     ))
@@ -343,7 +384,7 @@ const ReportView = () => {
                         )}
                         {/* Add Comment Form */}
                         <form
-                            className="mt-6 flex flex-col md:flex-row gap-2 items-center"
+                            className="mt-4 flex flex-col sm:flex-row gap-2 items-center"
                             onSubmit={async e => {
                                 e.preventDefault();
                                 setCommentError('');
@@ -354,7 +395,6 @@ const ReportView = () => {
                                 setCommentLoading(true);
                                 await postComment({
                                     payload: { text: commentText },
-                                    headers: {},
                                 });
                                 setCommentLoading(false);
                             }}
@@ -369,14 +409,17 @@ const ReportView = () => {
                             />
                             <button
                                 type="submit"
-                                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition"
+                                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition"
                                 disabled={commentLoading || postLoading}
                             >
-                                {(commentLoading || postLoading) ? 'Posting...' : 'Comment'}
+                                {commentLoading || postLoading ? 'Posting...' : 'Comment'}
                             </button>
                         </form>
-                        {commentError && <div className="mt-2 text-destructive text-sm">{commentError}</div>}
-                        {postError && <div className="mt-2 text-destructive text-sm">{postError}</div>}
+                        {(commentError || postError) && (
+                            <div className="mt-2 text-destructive text-sm">
+                                {commentError || postError}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

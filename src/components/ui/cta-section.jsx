@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Shield, ArrowRight, Users, Clock } from "lucide-react";
+import Link from "next/link";
 
 const CTASection = () => {
   return (
@@ -24,6 +25,7 @@ const CTASection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Link href="/login">
             <Button 
             size="lg" 
             className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 
@@ -33,9 +35,7 @@ const CTASection = () => {
             Start Free Trial
             <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="outline" size="lg" className="border-2">
-              Schedule Demo
-            </Button>
+            </Link>
           </div>
         </div>
         

@@ -7,7 +7,7 @@ const Footer = () => {
       <footer className="my-container mx-auto flex gap-2 justify-between items-start">
         
         <div className="w-[30%]">
-          <h2 className="h-[63px] mb-5 uppercase flex flex-col justify-end items-start text-sm font-medium">About Absento</h2>
+          <h2 className="h-[63px] mb-5 uppercase flex flex-col justify-end items-start text-sm font-medium">About MEDICRYPT</h2>
           <p className="text-xs max-w-[80%]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio repellat tempora tempore nisi quo a cupiditate numquam eligendi sint dolorum eius voluptatibus.
           </p>

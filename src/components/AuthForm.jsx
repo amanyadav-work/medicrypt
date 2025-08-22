@@ -264,7 +264,7 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
                       accept="image/*"
                       onChange={handleFileChange}
                     />
-                    <Button type="button" className='w-[100px]' disabled={isProcessing} onClick={getFaceDescriptor}>
+                    <Button type="button" className='w-[100px] self-end' disabled={isProcessing} onClick={getFaceDescriptor}>
                       {isProcessing ? <Loader /> : "  Detect Image"}
                     </Button>
                   </div>
@@ -327,11 +327,11 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
             </div>
           </form>
 
-          <div className="bg-muted relative hidden md:block">
+          <div className="bg-muted relative">
             <img
-              src="/placeholder.svg"
+              src="/images/auth-img.jpg"
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
         </CardContent>

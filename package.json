@@ -24,6 +24,8 @@
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
     "face-api.js": "^0.22.2",
     "groq-sdk": "^0.30.0",
     "jose": "^6.0.13",
