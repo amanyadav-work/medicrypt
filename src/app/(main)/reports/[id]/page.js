@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
+import SingleFaceDetector from '@/components/SingleFaceDetector';
 import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import Image from 'next/image';
@@ -71,6 +72,7 @@ const ReportView = () => {
 
     const [shareSuccess, setShareSuccess] = useState('');
     const [openShareDialog, setOpenShareDialog] = useState(false);
+    const [faceVerified, setFaceVerified] = useState(false);
 
     const {
         isLoading: shareLoading,
@@ -82,7 +84,7 @@ const ReportView = () => {
         auto: false,
         onSuccess: () => {
             setShareSuccess('Report shared successfully!');
-            toast.success(err.message || 'Failed to share report');
+            toast.success('Report shared successfully!');
             reset();
         },
         onError: (err) => {
@@ -117,11 +119,31 @@ const ReportView = () => {
         </div>
     );
     if (!data) return null;
-    // Only show report if current user is owner
-    if (!user || !data.owner || String(user._id) !== String(data.owner._id)) {
+    // Only show report if current user is owner or in sharableUsers
+    const isOwner = user && data.owner && String(user._id) === String(data.owner._id);
+    const isShared = user && Array.isArray(data.sharableUsers) && data.sharableUsers.some(u => String(u) === String(user._id));
+    if (!isOwner && !isShared) {
         return (
             <div className="flex justify-center items-center min-h-[60vh]">
                 <div className="text-muted-foreground text-lg font-medium">You do not have access to this report.</div>
+            </div>
+        );
+    }
+    // If shared user, require face verification
+    if (isShared && !isOwner && !faceVerified) {
+        // You may want to fetch the targetDescriptor from user.faceDescriptor or report
+        const targetDescriptor = user?.faceDescriptor|| [];
+        console.log("Descriptor length before save:", targetDescriptor.length); // should be 128
+
+        return (
+            <div className="flex flex-col items-center min-h-[60vh] py-10 px-4">
+                <h2 className="text-xl font-semibold mb-6 text-center">Face Verification Required</h2>
+                <SingleFaceDetector
+                    startDetection={true}
+                    targetDescriptor={targetDescriptor}
+                    onMatch={() => setFaceVerified(true)}
+                />
+                <div className="mt-4 text-muted-foreground text-center">Please verify your face to access this shared report.</div>
             </div>
         );
     }
@@ -130,42 +152,44 @@ const ReportView = () => {
             <div className="w-full max-w-2xl">
                 <div className="bg-card border border-border rounded-xl shadow-lg p-8 flex flex-col gap-8">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center w-full mb-2 gap-2">
-                        {/* Share Button & Dialog */}
-                        <Dialog open={openShareDialog} onOpenChange={setOpenShareDialog}>
-                            <DialogTrigger asChild>
-                                <button
-                                    type="button"
-                                    className="px-3 py-1 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm mb-2"
-                                >
-                                    Share Report
-                                </button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Share Report</DialogTitle>
-                                </DialogHeader>
-                                <form onSubmit={handleSubmit(onShareSubmit)} className="space-y-4">
-                                    <FormField
-                                        id="email"
-                                        label="User Email"
-                                        placeholder="Enter user email to share"
-                                        register={register}
-                                        errors={errors}
-                                        disabled={shareLoading}
-                                        required
-                                    />
-                                    <DialogFooter>
-                                        <button
-                                            type="submit"
-                                            className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm"
+                        {/* Share Button & Dialog - only for owner, not for shared users */}
+                        {isOwner && (
+                            <Dialog open={openShareDialog} onOpenChange={setOpenShareDialog}>
+                                <DialogTrigger asChild>
+                                    <button
+                                        type="button"
+                                        className="px-3 py-1 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm mb-2"
+                                    >
+                                        Share Report
+                                    </button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Share Report</DialogTitle>
+                                    </DialogHeader>
+                                    <form onSubmit={handleSubmit(onShareSubmit)} className="space-y-4">
+                                        <FormField
+                                            id="email"
+                                            label="User Email"
+                                            placeholder="Enter user email to share"
+                                            register={register}
+                                            errors={errors}
                                             disabled={shareLoading}
-                                        >
-                                            {shareLoading ? 'Sharing...' : 'Share'}
-                                        </button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
+                                            required
+                                        />
+                                        <DialogFooter>
+                                            <button
+                                                type="submit"
+                                                className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition text-sm"
+                                                disabled={shareLoading}
+                                            >
+                                                {shareLoading ? 'Sharing...' : 'Share'}
+                                            </button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        )}
                         <h2 className="text-2xl font-semibold tracking-tight">{data.name || 'Report'}</h2>
                         <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
                             {data.owner && (

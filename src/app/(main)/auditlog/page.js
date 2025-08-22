@@ -28,7 +28,7 @@ const AuditLogPage = () => {
   if (userLoading || isLoading) return <Loader fullScreen />;
   if (error) return <div className="text-destructive text-center py-10">{error}</div>;
 
-  const logs = (data?.logs || []).filter(log => log.user?._id === user._id);
+  const logs = data?.logs || [];
 
   return (
     <div className="w-full mx-auto py-10 px-4">
@@ -39,6 +39,7 @@ const AuditLogPage = () => {
             <TableHead>User</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Action</TableHead>
+            <TableHead>Resource</TableHead>
             <TableHead className='text-right'>Timestamp</TableHead>
           </TableRow>
         </TableHeader>
@@ -57,6 +58,7 @@ const AuditLogPage = () => {
                 </TableCell>
                 <TableCell>{log.user?.email}</TableCell>
                 <TableCell className="capitalize font-medium">{log.action}</TableCell>
+                <TableCell>{log.resourceName || '-'}</TableCell>
                 <TableCell className='text-right'>{format(new Date(log.createdAt), "MMM d, yyyy h:mm a")}</TableCell>
               </TableRow>
             ))

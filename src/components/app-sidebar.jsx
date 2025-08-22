@@ -86,25 +86,7 @@ const data = {
         },
       ],
     },
-    {
-      title: "Media Library",
-      url: "/media",
-      icon: GalleryVerticalEnd,
-      items: [
-        {
-          title: "Images",
-          url: "/media/images",
-        },
-        {
-          title: "Videos",
-          url: "/media/videos",
-        },
-        {
-          title: "Documents",
-          url: "/media/documents",
-        },
-      ],
-    },
+
     {
       title: "Settings",
       url: "/settings",
@@ -112,19 +94,11 @@ const data = {
       items: [
         {
           title: "Profile",
-          url: "/settings/profile",
+          url: "/profile",
         },
         {
-          title: "Team Settings",
-          url: "/settings/team",
-        },
-        {
-          title: "Billing",
-          url: "/settings/billing",
-        },
-        {
-          title: "Notifications",
-          url: "/settings/notifications",
+          title: "Audit Logs",
+          url: "/auditlog",
         },
       ],
     },
@@ -143,13 +117,29 @@ export function AppSidebar({
   ...props
 }) {
   const { user } = useUser()
+  // Filter navMain to hide 'Create Report' if user is not doctor or patient
+  const navMainFiltered = data.navMain.map(section => {
+    if (section.title === 'Reports') {
+      return {
+        ...section,
+        items: section.items.filter(item => {
+          if (item.title === 'Create Report') {
+            return user?.role === 'doctor' || user?.role === 'patient';
+          }
+          return true;
+        })
+      };
+    }
+    return section;
+  });
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={navMainFiltered} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>

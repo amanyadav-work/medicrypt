@@ -21,7 +21,7 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
   const isSignup = pathname === 'signup';
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [faceDescriptor, setFaceDescriptor] = useState(null);
-  const [isModelLoading, setIsModelLoading] = useState(true);
+  const [isModelLoading, setIsModelLoading] = useState(isSignup ? true : null);
 
   const [image, setImage] = useState(null);
   const { setUser } = useUser();
@@ -30,7 +30,13 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
   // Zod schemas
   const signupSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long')
+      .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
+      .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
+      .regex(/\d/, 'Password must contain at least one number')
+      .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
     name: z.string().min(1, 'Name is required'),
     age: z.coerce.number().int().min(1, 'Age is required'),
     role: z.enum(['patient', 'doctor', 'pharmacist', 'diagnostic'], {
@@ -92,7 +98,7 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
   useEffect(() => {
     window.scrollTo(0, 0);
     const loadModels = async () => {
-      if (modelsLoaded && !isSignup) return;
+      if (modelsLoaded || !isSignup) return;
       try {
         const modelUrl = "https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights";
         await faceapi.nets.ssdMobilenetv1.loadFromUri(modelUrl);
@@ -247,7 +253,7 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
                     />
                   </div>
 
-                  <div className="flex gap-2 items-center">
+                  <div className="flex gap-2 items-end items-center">
                     <FormField
                       id="avatar"
                       label="Profile Image"

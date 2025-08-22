@@ -33,7 +33,7 @@ const UserReportsPage = () => {
 
   const [filter, setFilter] = useState("all");
 
-  if (userLoading || isLoading) return <Loader fullScreen />;
+  if (userLoading || isLoading) return <Loader />;
   if (error) return <div className="text-destructive text-center py-10">{error}</div>;
 
   const reports = data?.reports || [];

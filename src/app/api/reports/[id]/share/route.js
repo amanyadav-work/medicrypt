@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/mongoose';
 import Report from '@/models/Report';
+import SharedReport from '@/models/SharedReport';
 import User from '@/models/User';
 import { sendErrorResponse } from '@/lib/sendErrorResponse';
 
@@ -30,8 +31,29 @@ export async function POST(req, { params }) {
     if (report.sharableUsers.some(u => String(u) === String(userToShare._id))) {
       return sendErrorResponse({ code: 'ALREADY_SHARED', message: 'Report already shared with this user', status: 400 });
     }
-    report.sharableUsers.push(userToShare._id);
-    await report.save();
+    
+await Report.updateOne(
+  { _id: report._id },
+  { $addToSet: { sharableUsers: userToShare._id } }
+);
+
+
+    // Create or update SharedReport document for listing
+    let sharedReport = await SharedReport.findOne({ report: report._id });
+    if (sharedReport) {
+      // Add user to sharedWith if not already present
+      if (!sharedReport.sharedWith.some(u => String(u) === String(userToShare._id))) {
+        sharedReport.sharedWith.push(userToShare._id);
+        await sharedReport.save();
+      }
+    } else {
+      await SharedReport.create({
+        report: report._id,
+        sharedWith: [userToShare._id],
+        sharedBy: report.owner,
+      });
+    }
+
     return NextResponse.json({ success: true });
   } catch (err) {
     return sendErrorResponse({ code: 'SHARE_ERROR', message: err.message || 'Failed to share report', status: 500 });

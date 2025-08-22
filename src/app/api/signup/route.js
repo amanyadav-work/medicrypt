@@ -16,8 +16,8 @@ export async function POST(req) {
     const name = formData.get('name');
     const age = formData.get('age');
     const avatarFile = formData.get('avatar');
-    const role = formData.get('role'); 
-    const faceDescriptor = formData.get('faceDescriptor'); 
+    const role = formData.get('role');
+    const faceDescriptor = formData.get('faceDescriptor');
 
     if (!email || !password || !name || !age || !avatarFile || !role || !faceDescriptor) {
       return sendErrorResponse({ code: 'missing_fields', message: 'All fields are required', status: 400 });
@@ -34,6 +34,17 @@ export async function POST(req) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    let parsedDescriptor;
+    try {
+      parsedDescriptor = JSON.parse(faceDescriptor);
+      if (!Array.isArray(parsedDescriptor) || parsedDescriptor.length !== 128) {
+        return sendErrorResponse({ code: 'invalid_descriptor', message: 'Invalid face descriptor', status: 400 });
+      }
+    } catch (err) {
+      return sendErrorResponse({ code: 'bad_descriptor', message: 'Malformed face descriptor', status: 400 });
+    }
+
+
     const newUser = await User.create({
       email,
       password: hashedPassword,
@@ -41,7 +52,7 @@ export async function POST(req) {
       age,
       avatar,
       role,
-      faceDescriptor
+      faceDescriptor: parsedDescriptor,
     });
 
     const token = jwt.sign(

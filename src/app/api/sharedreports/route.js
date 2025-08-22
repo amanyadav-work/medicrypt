@@ -13,7 +13,7 @@ export async function GET(req) {
     }
     const userID = payload.userId;
     // Find all shared reports for this user
-    const sharedReports = await SharedReport.find({ sharedWith: userID })
+  const sharedReports = await SharedReport.find({ sharedWith: { $in: [userID] } })
       .populate({
         path: 'report',
         populate: { path: 'owner', select: 'name email avatar' },

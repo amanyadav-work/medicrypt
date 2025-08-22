@@ -21,6 +21,8 @@ const schema = z.object({
     }),
 });
 
+import { useUser } from '@/context/UserContext';
+
 const UploadReport = () => {
     const { data, error, isLoading, refetch } = useFetch({
         url: '/api/reports/upload',
@@ -31,7 +33,14 @@ const UploadReport = () => {
         onError: (err) => { },
     });
 
-    const router = useRouter()
+    const router = useRouter();
+    const { user, isLoading: userLoading } = useUser();
+
+    React.useEffect(() => {
+        if (!userLoading && user && !['patient', 'doctor'].includes(user.role)) {
+            router.replace('/dashboard');
+        }
+    }, [user, userLoading, router]);
 
     const {
         control,
@@ -68,6 +77,9 @@ const UploadReport = () => {
             }
         });
     };
+
+    if (userLoading) return <Loader fullScreen />;
+    if (!user || !['patient', 'doctor'].includes(user.role)) return null;
 
     return (
         <div className="flex justify-center items-center min-h-[60vh]">
