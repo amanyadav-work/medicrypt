@@ -4,9 +4,8 @@ import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { reports } from '@/app/data/reportdata';
 
-export default function BarChart() {
+export default function BarChart({reports}) {
   const option = {
     title: {
       text: 'Views per Report',
