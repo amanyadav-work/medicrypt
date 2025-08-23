@@ -28,9 +28,9 @@ const CTASection = () => {
             <Link href="/login">
             <Button 
             size="lg" 
-            className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 
-                 dark:from-green-300 dark:via-emerald-300 dark:to-teal-300
-                 text-white hover:opacity-90 shadow-md shadow-emerald-400/20 font-medium"
+            className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500
+                      dark:from-green-400 dark:via-emerald-400 dark:to-teal-400
+                        hover:opacity-90 shadow-md shadow-emerald-300/20 font-medium"
             >
             Start Free Trial
             <ArrowRight className="ml-2 h-5 w-5" />
