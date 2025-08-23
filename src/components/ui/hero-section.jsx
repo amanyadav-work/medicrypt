@@ -32,12 +32,13 @@ const HeroSection = () => {
                         <div className="flex flex-col sm:flex-row gap-4 mb-12">
                             <Link href="/login"><Button
                                 size="lg"
-                                className="bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400
-                                         dark:from-green-300 dark:via-emerald-300 dark:to-teal-300
-                                         text-white hover:opacity-90 shadow-md shadow-emerald-400/20 font-medium"
+                                className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500
+                                dark:from-green-400 dark:via-emerald-400 dark:to-teal-400
+                                hover:opacity-90 shadow-md shadow-emerald-300/20 font-medium"
                             >
                                 Start Sharing Securely
-                            </Button></Link>
+                            </Button>
+                            </Link>
 
                             <Link href="/login">
                                 <Button variant="outline" size="lg" className="border-2">
@@ -72,7 +73,7 @@ const HeroSection = () => {
 
                     <div className="relative w-full h-[500px]">
                         <Image
-                            src="/images/hero.jpg"
+                            src="/images/hero2.jpg"
                             alt="Secure medical record sharing interface"
                             fill
                             className="rounded-2xl shadow-card object-cover"

@@ -11,33 +11,52 @@ export default function SummaryCards() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 font-outfit">
-      <Card className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl">
+      <Card className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl dark:bg-white/5 dark:border-white/10">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold tracking-wide">Total Reports</CardTitle>
+          <CardTitle className="text-lg font-semibold tracking-wide text-gray-900 dark:text-gray-100">
+            Total Reports
+          </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-extrabold animate-pulse">{totalReports}</CardContent>
+        <CardContent className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 animate-pulse">
+          {totalReports}
+        </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-br from-pink-500 to-red-500 text-white shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl">
+      <Card className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl dark:bg-white/5 dark:border-white/10">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold tracking-wide">Total Views</CardTitle>
+          <CardTitle className="text-lg font-semibold tracking-wide text-gray-900 dark:text-gray-100">
+            Total Views
+          </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-extrabold animate-pulse">{totalViews}</CardContent>
+        <CardContent className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 animate-pulse">
+          {totalViews}
+        </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-br from-green-400 to-emerald-600 text-white shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl">
+
+      <Card className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl dark:bg-white/5 dark:border-white/10">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold tracking-wide">PDF Reports</CardTitle>
+          <CardTitle className="text-lg font-semibold tracking-wide text-gray-900 dark:text-gray-100">
+            PDF Reports
+          </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-extrabold animate-pulse">{pdfReports}</CardContent>
+        <CardContent className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 animate-pulse">
+          {pdfReports}
+        </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-br from-yellow-400 to-orange-500 text-white shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl">
+
+      <Card className="bg-white/10 backdrop-blur-md border border-white/20 shadow-xl transition-transform duration-300 hover:scale-105 rounded-2xl dark:bg-white/5 dark:border-white/10">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold tracking-wide">Image Reports</CardTitle>
+          <CardTitle className="text-lg font-semibold tracking-wide text-gray-900 dark:text-gray-100">
+            Image Reports
+          </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-extrabold animate-pulse">{imageReports}</CardContent>
+        <CardContent className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 animate-pulse">
+          {imageReports}
+        </CardContent>
       </Card>
+
     </div>
   );
 }
