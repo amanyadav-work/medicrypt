@@ -5,7 +5,7 @@ import useFetch from "@/hooks/useFetch";
 import Loader from "@/components/ui/Loader";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { FileText, Image as LucideImage, Search } from "lucide-react";
+import { FileText, Image as LucideImage, Search, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -32,6 +32,7 @@ export default function UserReportsPage() {
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortByViews, setSortByViews] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   if (userLoading || isLoading) return <Loader />;
   if (error) return <div className="text-destructive text-center py-10">{error}</div>;
@@ -50,39 +51,90 @@ export default function UserReportsPage() {
   }
 
   return (
-    <div className="mx-auto py-10 px-2 sm:px-4 md:px-8 lg:px-16 max-w-5xl flex flex-col items-center">
-      <h2 className="text-3xl font-bold mb-8 text-center 
-               bg-gradient-to-r 
-               from-green-500 via-emerald-500 to-teal-500 
-               dark:from-lime-400 dark:via-green-400 dark:to-emerald-300 
-               bg-clip-text text-transparent drop-shadow-sm">
-        Your Reports
-      </h2>
+    <>
+      <div>
+        <div className='flex flex-col md:flex-row justify-between items-start md:items-center px-5 border-b-2 py-5 gap-4'>
+          <h1 className="text-2xl font-bold 
+            bg-gradient-to-r 
+            from-green-500 via-emerald-500 to-teal-500 
+            dark:from-lime-400 dark:via-green-400 dark:to-emerald-300 
+            bg-clip-text text-transparent drop-shadow-sm">
+            Your Reports
+          </h1>
 
-      <div className="relative w-full max-w-sm mb-8">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search reports"
-          className="pl-10 w-full"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            {/* Search Input */}
+            <div className="relative w-full sm:max-w-sm">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search reports"
+                className="pl-10 w-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            {/* Filter Dropdown */}
+            <div className="relative">
+              <Button variant="outline" onClick={() => setDropdownOpen(!dropdownOpen)} className="w-full sm:w-auto flex items-center justify-between gap-2">
+                Filter Type <ChevronDown className="h-4 w-4" />
+              </Button>
+
+              {dropdownOpen && (
+                <div className="absolute z-50 mt-2 w-44 rounded-md shadow-lg bg-white dark:bg-zinc-900 ring-1 ring-black ring-opacity-5">
+                  <div className="py-1 text-sm">
+                    <button
+                      onClick={() => {
+                        setFilter("all");
+                        setDropdownOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 ${
+                        filter === 'all' ? 'font-semibold text-green-500' : ''
+                      }`}
+                    >
+                      {filter === "all" && "✅ "} All
+                    </button>
+                    <button
+                      onClick={() => {
+                        setFilter("pdf");
+                        setDropdownOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 ${
+                        filter === 'pdf' ? 'font-semibold text-green-500' : ''
+                      }`}
+                    >
+                      {filter === "pdf" && "✅ "} PDF
+                    </button>
+                    <button
+                      onClick={() => {
+                        setFilter("image");
+                        setDropdownOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-zinc-800 ${
+                        filter === 'image' ? 'font-semibold text-green-500' : ''
+                      }`}
+                    >
+                      {filter === "image" && "✅ "} Images
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Sort by Views Button (Separate) */}
+            <Button
+              variant={sortByViews ? "default" : "outline"}
+              onClick={() => setSortByViews(prev => !prev)}
+            >
+              Sort by Views
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4 mb-8">
-        <Button variant={filter === "all" ? "default" : "outline"} onClick={() => setFilter("all")}>All</Button>
-        <Button variant={filter === "pdf" ? "default" : "outline"} onClick={() => setFilter("pdf")}>Pdf</Button>
-        <Button variant={filter === "image" ? "default" : "outline"} onClick={() => setFilter("image")}>Images</Button>
-        <Button
-          variant={sortByViews ? "default" : "outline"}
-          onClick={() => setSortByViews(prev => !prev)}
-        >
-          Sort by Views
-        </Button>
-      </div>
-
-      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full min-h-[200px]">
+      {/* Reports Grid */}
+      <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full min-h-[200px] px-5 py-8">
         {filteredReports.length === 0 ? (
           <div className="col-span-full text-center text-muted-foreground py-8">
             No reports found.
@@ -118,6 +170,6 @@ export default function UserReportsPage() {
           ))
         )}
       </div>
-    </div>
+    </>
   );
 }

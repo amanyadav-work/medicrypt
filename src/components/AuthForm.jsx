@@ -184,14 +184,6 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
     });
   };
 
-
-
-
-
-
-
-
-
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -204,8 +196,8 @@ export function AuthForm({ className, pathname = 'login', ...props }) {
                 </h1>
                 <p className="text-muted-foreground text-balance">
                   {isSignup
-                    ? 'Sign up for an Acme Inc account'
-                    : 'Login to your Acme Inc account'}
+                    ? 'Sign up for an MediCrypt account'
+                    : 'Login to your MediCrypt account'}
                 </p>
               </div>
 
