@@ -1,9 +1,8 @@
 'use client';
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { reports } from '@/app/data/reportdata';
 
-export default function SummaryCards() {
+export default function SummaryCards({reports}) {
   const totalReports = reports.length;
   const totalViews = reports.reduce((sum, r) => sum + r.views, 0);
   const pdfReports = reports.filter(r => r.type === 'pdf').length;
