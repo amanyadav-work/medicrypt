@@ -41,18 +41,10 @@ function ReportContent() {
   if (!report) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <Card className="max-w-md w-full">
+        <Card className="max-w-md w-full  h-screen">
           <CardContent className="p-8">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit} className="flex items-center justify-center flex-col gap-4">
               <h2 className="text-xl font-bold mb-2">OTP Access</h2>
-              <input
-                type="text"
-                placeholder="Enter token from link"
-                value={token}
-                readOnly
-                className="border rounded px-3 py-2 bg-muted"
-                required
-              />
               <input
                 type="text"
                 placeholder="Enter OTP"

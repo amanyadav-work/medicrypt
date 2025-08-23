@@ -7,22 +7,23 @@ import { sendErrorResponse } from '@/lib/sendErrorResponse';
 import OtpShare from '@/models/OtpShare';
 import { sendWhatsapp } from '@/lib/twilio';
 import { verifyToken } from '@/lib/verifyToken';
+import { generateQrCodeAndUpload } from '@/lib/qr';
 
 export async function POST(req, { params }) {
   try {
     await dbConnect();
-    
+
     const { id } = params;
     const body = await req.json();
     const { email, phone, accessType } = body;
     let userToShare;
     const report = await Report.findById(id);
     const payload = await verifyToken(req);
-  
+
     if (!payload) {
       return sendErrorResponse({ code: 'unauthorized', message: 'Please Login First', status: 401 });
     }
-  
+
     const userID = payload.userId;
     if (!report) {
       return sendErrorResponse({ code: 'REPORT_NOT_FOUND', message: 'Report not found', status: 404 });
@@ -85,16 +86,41 @@ export async function POST(req, { params }) {
         report: report._id,
         token,
         otp,
-       expiresAt, ...(userID && { user: userID }) 
+        expiresAt, ...(userID && { user: userID })
       });
       // Send WhatsApp message with OTP and link
       try {
         const link = `${process.env.FRONT_END_URL}/otp-access?token=${encodeURIComponent(token)}`;
-        const message = `Your OTP for report access is: ${otp}\nAccess link:\n\n ${link}`;
+        const message = `Your OTP for report access is: ${otp}\n\n${link}`;
         await sendWhatsapp({ phone, message });
       } catch (err) {
-        // Log but don't fail sharing if WhatsApp fails
+        // Log but don't fail sharing if sWhatsApp fails
         console.error('WhatsApp send error:', err);
+      }
+    }
+
+    if (accessType === 'qr') {
+      if (!phone) {
+        return sendErrorResponse({ code: 'PHONE_REQUIRED', message: 'Phone is required', status: 400 });
+      }
+
+      try {
+        const jwt = require('jsonwebtoken');
+        const token = jwt.sign(
+          { reportId: report._id, type: 'qr' },
+          process.env.JWT_SECRET,
+          { expiresIn: '30m' }
+        );
+
+        const link = `${process.env.FRONT_END_URL}qr-access?token=${encodeURIComponent(token)}`;
+
+        const qrImageUrl = await generateQrCodeAndUpload(link);
+
+        const message = `Scan this QR code to access the report.`;
+
+        await sendWhatsapp({ phone, message, img: qrImageUrl });
+      } catch (err) {
+        console.error('QR code share error:', err);
       }
     }
 

@@ -61,10 +61,6 @@ const data = {
           title: "Recent Reports",
           url: "/reports",
         },
-        {
-          title: "Notifications",
-          url: "/dashboard/notifications",
-        },
       ],
     },
     {

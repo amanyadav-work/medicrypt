@@ -3,7 +3,7 @@ import { jwtVerify } from 'jose';
 import { verifyToken } from './lib/verifyToken';
 
 const PUBLIC_ONLY_ROUTES = ['/login', '/signup','/'];
-const PUBLIC_ROUTES = []; 
+const PUBLIC_ROUTES = ['/otp-access','/qr-access']; 
 
 export async function middleware(req) {
   const { pathname } = req.nextUrl;

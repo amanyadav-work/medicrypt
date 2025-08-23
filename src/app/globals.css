@@ -175,3 +175,29 @@ body,h2,h1,h4,h3,p,a,input,button,table, label,span {
   mask: linear-gradient(rgb(0, 0, 0) 60%, rgb(0 0 0 / 0%) 100%);
   opacity: 1;
 }
+
+/* Works on modern browsers */
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+
+/* Cursor pointer for common interactive elements */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+label,
+select,
+summary,
+[role="button"],
+[tabindex]:not([tabindex="-1"]),
+.cursor-pointer {
+  cursor: pointer;
+}

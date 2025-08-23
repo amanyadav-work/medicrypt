@@ -65,7 +65,7 @@ export async function GET(req, { params }) {
       action: 'view',
       resource: `report:${id}`,
     });
-console.log(signedUrl)
+    console.log(signedUrl)
     // Return full report + signed URL (if needed)
     return NextResponse.json({
       ...report,

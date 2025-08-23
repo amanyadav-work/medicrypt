@@ -10,7 +10,7 @@ import useFetch from "@/hooks/useFetch";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button"; // ShadCN button
 
-const ITEMS_PER_PAGE = 50;
+const ITEMS_PER_PAGE = 30;
 
 const AuditLogPage = () => {
   const { user, isLoading: userLoading } = useUser();
@@ -80,7 +80,7 @@ const AuditLogPage = () => {
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-4 mt-8">
+        <div className="flex items-center justify-between gap-4 mt-8">
           <Button
             variant="outline"
             disabled={page === 1}
