@@ -2,10 +2,9 @@
 
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
-import { reports } from '@/app/data/reportdata';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
-export default function PieChart() {
+export default function PieChart({reports}) {
   const typeCounts = reports.reduce((acc, r) => {
     acc[r.type] = (acc[r.type] || 0) + 1;
     return acc;
